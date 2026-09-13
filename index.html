@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeStart — онлайн-школа программирования</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0F;
+    --bg-2:#111118;
+    --card:#15151F;
+    --border:#23232F;
+    --text:#EDEDF2;
+    --muted:#9494A8;
+    --accent:#6C63FF;
+    --accent-hover:#5A51F0;
+    --success:#2ECC71;
+    --error:#FF5C5C;
+    --radius:8px;
+    --radius-lg:16px;
+    --max:1200px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body.no-scroll{overflow:hidden}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  .container{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ===== Header ===== */
+  .header{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:100;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    background:rgba(10,10,15,.7);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s, background .3s;
+  }
+  .header.scrolled{
+    border-color:var(--border);
+    background:rgba(10,10,15,.9);
+  }
+  .header__inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-.02em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo span{color:var(--accent)}
+
+  .nav{
+    display:flex;
+    gap:32px;
+    align-items:center;
+  }
+  .nav a{
+    font-size:14px;
+    font-weight:500;
+    color:var(--muted);
+    transition:color .2s;
+  }
+  .nav a:hover{color:var(--text)}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 24px;
+    border-radius:var(--radius);
+    font-size:15px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+    transition:transform .15s, background .2s, box-shadow .2s;
+  }
+
+  .btn--primary{
+    position:relative;
+    background:linear-gradient(135deg, #6C63FF 0%, #8B7CFF 50%, #6C63FF 100%);
+    background-size:200% 200%;
+    color:#fff;
+    box-shadow:
+      0 4px 16px rgba(108,99,255,.4),
+      0 0 0 1px rgba(255,255,255,.06) inset;
+    animation:btnGlow 3s ease-in-out infinite;
+  }
+  .btn--primary::before{
+    content:'';
+    position:absolute;
+    inset:-3px;
+    border-radius:calc(var(--radius) + 3px);
+    background:linear-gradient(135deg, #6C63FF, #B4AFFF, #6C63FF);
+    opacity:0;
+    z-index:-1;
+    filter:blur(8px);
+    transition:opacity .3s;
+  }
+  .btn--primary:hover{
+    background-position:100% 50%;
+    box-shadow:
+      0 6px 24px rgba(108,99,255,.6),
+      0 0 0 1px rgba(255,255,255,.1) inset;
+    transform:translateY(-1px);
+  }
+  .btn--primary:hover::before{opacity:.6}
+  .btn--primary:active{transform:translateY(0) scale(.98)}
+
+  @keyframes btnGlow{
+    0%, 100%{
+      box-shadow:
+        0 4px 16px rgba(108,99,255,.4),
+        0 0 0 1px rgba(255,255,255,.06) inset;
+    }
+    50%{
+      box-shadow:
+        0 4px 24px rgba(108,99,255,.65),
+        0 0 0 1px rgba(255,255,255,.1) inset;
+    }
+  }
+
+  .btn--pulse{
+    animation:btnGlow 3s ease-in-out infinite, btnPulse 3s ease-in-out infinite;
+  }
+  @keyframes btnPulse{
+    0%{box-shadow:0 4px 16px rgba(108,99,255,.4), 0 0 0 0 rgba(108,99,255,.6)}
+    70%{box-shadow:0 4px 20px rgba(108,99,255,.5), 0 0 0 12px rgba(108,99,255,0)}
+    100%{box-shadow:0 4px 16px rgba(108,99,255,.4), 0 0 0 0 rgba(108,99,255,0)}
+  }
+
+  .btn--ghost{
+    background:transparent;
+    color:var(--text);
+    border:1px solid var(--border);
+  }
+  .btn--ghost:hover{border-color:var(--accent)}
+
+  .btn--lg{padding:16px 32px;font-size:16px}
+
+  .btn--hero-cta{
+    padding:18px 36px;
+    font-size:17px;
+    font-weight:700;
+    letter-spacing:-.01em;
+    background:linear-gradient(135deg, #6C63FF 0%, #8B7CFF 50%, #6C63FF 100%);
+    background-size:200% 200%;
+    box-shadow:
+      0 8px 32px rgba(108,99,255,.5),
+      0 0 0 1px rgba(255,255,255,.08) inset;
+    animation:btnGlow 3s ease-in-out infinite, btnPulse 3s ease-in-out infinite;
+  }
+  .btn--hero-cta:hover{
+    background-position:100% 50%;
+    transform:translateY(-2px);
+    box-shadow:
+      0 12px 40px rgba(108,99,255,.7),
+      0 0 0 1px rgba(255,255,255,.15) inset;
+  }
+  .btn--hero-cta .arrow{
+    display:inline-block;
+    transition:transform .25s;
+  }
+  .btn--hero-cta:hover .arrow{transform:translateX(4px)}
+
+  /* Burger */
+  .burger{
+    display:none;
+    background:none;
+    border:none;
+    cursor:pointer;
+    width:36px;height:36px;
+    position:relative;
+    z-index:110;
+    padding:6px;
+  }
+  .burger span{
+    display:block;
+    width:22px;height:2px;
+    background:var(--text);
+    margin:5px auto;
+    border-radius:2px;
+    transition:transform .3s, opacity .3s;
+  }
+  .burger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .burger.active span:nth-child(2){opacity:0}
+  .burger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:120px 0 80px;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:-200px;right:-200px;
+    width:700px;height:700px;
+    background:radial-gradient(circle, rgba(108,99,255,.25) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .hero::after{
+    content:'';
+    position:absolute;
+    bottom:-300px;left:-200px;
+    width:600px;height:600px;
+    background:radial-gradient(circle, rgba(108,99,255,.12) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .hero__inner{
+    position:relative;
+    z-index:2;
+    max-width:820px;
+  }
+  .hero__badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 14px;
+    border-radius:100px;
+    background:rgba(108,99,255,.1);
+    border:1px solid rgba(108,99,255,.3);
+    font-size:13px;
+    color:#A8A3FF;
+    margin-bottom:24px;
+  }
+  .hero__badge::before{
+    content:'';
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent);
+  }
+  .hero h1{
+    font-size:clamp(36px,6vw,64px);
+    line-height:1.1;
+    letter-spacing:-.03em;
+    font-weight:800;
+    margin-bottom:24px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(135deg,#6C63FF 0%,#B4AFFF 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p{
+    font-size:clamp(16px,2vw,19px);
+    color:var(--muted);
+    max-width:600px;
+    margin-bottom:40px;
+  }
+  .hero__actions{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .hero__stats{
+    display:flex;
+    gap:48px;
+    margin-top:64px;
+    flex-wrap:wrap;
+  }
+  .hero__stat b{
+    display:block;
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:-.02em;
+  }
+  .hero__stat span{
+    font-size:14px;
+    color:var(--muted);
+  }
+
+  /* ===== Section generic ===== */
+  section{padding:96px 0}
+  .section-head{
+    text-align:center;
+    margin-bottom:64px;
+  }
+  .section-head h2{
+    font-size:clamp(28px,4vw,42px);
+    letter-spacing:-.02em;
+    font-weight:800;
+    margin-bottom:16px;
+  }
+  .section-head p{
+    color:var(--muted);
+    font-size:17px;
+    max-width:560px;
+    margin:0 auto;
+  }
+  .section-tag{
+    display:inline-block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    margin-bottom:16px;
+  }
+
+  /* ===== Directions ===== */
+  .directions{background:var(--bg-2)}
+  .grid-4{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+  }
+  .card{
+    position:relative;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:28px;
+    cursor:pointer;
+    text-align:left;
+    color:inherit;
+    font-family:inherit;
+    font-size:inherit;
+    width:100%;
+    transition:border-color .25s, transform .25s, background .25s;
+  }
+  .card:hover,
+  .card:focus-visible{
+    border-color:rgba(108,99,255,.5);
+    transform:translateY(-4px);
+    background:#181822;
+    outline:none;
+  }
+  .card__icon{
+    width:52px;height:52px;
+    border-radius:12px;
+    background:rgba(108,99,255,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    font-size:19px;
+    font-weight:700;
+    margin-bottom:10px;
+    letter-spacing:-.01em;
+  }
+  .card p{
+    font-size:14.5px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .card__meta{
+    margin-top:16px;
+    font-size:13px;
+    color:var(--accent);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .card__meta::after{
+    content:'→';
+    transition:transform .25s;
+  }
+  .card:hover .card__meta::after{transform:translateX(4px)}
+
+  /* ===== Advantages ===== */
+  .advantages .grid-4{grid-template-columns:repeat(4,1fr)}
+  .adv{
+    padding:28px;
+    border-radius:var(--radius-lg);
+    border:1px solid var(--border);
+    background:linear-gradient(180deg, var(--card) 0%, rgba(21,21,31,.5) 100%);
+    transition:border-color .25s;
+  }
+  .adv:hover{border-color:rgba(108,99,255,.4)}
+  .adv__icon{
+    font-size:28px;
+    margin-bottom:16px;
+  }
+  .adv h3{
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .adv p{
+    font-size:14px;
+    color:var(--muted);
+  }
+
+  /* ===== Reviews ===== */
+  .reviews{background:var(--bg-2)}
+  .grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .review{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    cursor:pointer;
+    text-align:left;
+    color:inherit;
+    font-family:inherit;
+    font-size:inherit;
+    width:100%;
+    transition:border-color .25s, transform .25s;
+  }
+  .review:hover,
+  .review:focus-visible{
+    border-color:rgba(108,99,255,.5);
+    transform:translateY(-4px);
+    outline:none;
+  }
+  .review__stars{
+    color:#FFB800;
+    font-size:14px;
+    letter-spacing:2px;
+  }
+  .review__text{
+    font-size:15px;
+    color:#C8C8D4;
+    line-height:1.7;
+    flex:1;
+  }
+  .review__author{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+  }
+  .review__avatar{
+    width:44px;height:44px;
+    border-radius:50%;
+    object-fit:cover;
+    background:linear-gradient(135deg,#6C63FF,#B4AFFF);
+  }
+  .review__author b{
+    display:block;
+    font-size:15px;
+    font-weight:600;
+  }
+  .review__author span{
+    font-size:13px;
+    color:var(--muted);
+  }
+  .review__more{
+    font-size:13px;
+    color:var(--accent);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .review__more::after{
+    content:'→';
+    transition:transform .25s;
+  }
+  .review:hover .review__more::after{transform:translateX(4px)}
+
+  /* ===== Form ===== */
+  .form-section{
+    position:relative;
+    overflow:hidden;
+  }
+  .form-section::before{
+    content:'';
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:800px;height:800px;
+    background:radial-gradient(circle, rgba(108,99,255,.1) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .form-wrap{
+    position:relative;
+    z-index:2;
+    max-width:640px;
+    margin:0 auto;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:40px;
+  }
+  .form-group{margin-bottom:20px;position:relative}
+  .form-group label{
+    display:block;
+    font-size:14px;
+    font-weight:500;
+    margin-bottom:8px;
+    color:#C8C8D4;
+  }
+  .form-group input,
+  .form-group select{
+    width:100%;
+    padding:13px 16px;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--text);
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    transition:border-color .2s, box-shadow .2s;
+    outline:none;
+  }
+  .form-group input::placeholder{color:#5A5A70}
+  .form-group input:focus,
+  .form-group select:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(108,99,255,.12);
+  }
+  .form-group select{
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239494A8' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 16px center;
+    padding-right:40px;
+    cursor:pointer;
+  }
+  .form-group select option{background:var(--bg-2)}
+  .form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .form-submit{
+    width:100%;
+    margin-top:8px;
+  }
+  .form-note{
+    font-size:13px;
+    color:var(--muted);
+    text-align:center;
+    margin-top:16px;
+  }
+  .form-note a{color:var(--accent)}
+
+  /* ===== Валидация формы ===== */
+  .form-wrap.was-validated .form-group input:invalid,
+  .form-wrap.was-validated .form-group select:invalid{
+    border-color:var(--error);
+    box-shadow:0 0 0 4px rgba(255,92,92,.1);
+  }
+  .form-group input.is-invalid,
+  .form-group select.is-invalid{
+    border-color:var(--error);
+    box-shadow:0 0 0 4px rgba(255,92,92,.1);
+  }
+  .form-group input.is-valid,
+  .form-group select.is-valid{
+    border-color:var(--success);
+  }
+
+  .field-error{
+    display:none;
+    font-size:13px;
+    color:var(--error);
+    margin-top:6px;
+    line-height:1.4;
+    align-items:center;
+    gap:6px;
+  }
+  .field-error::before{
+    content:'⚠';
+    font-size:14px;
+  }
+  .field-error.show{display:flex}
+
+  .form-status{
+    display:none;
+    margin-top:16px;
+    padding:14px 18px;
+    border-radius:var(--radius);
+    font-size:14.5px;
+    line-height:1.5;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .form-status.show{display:flex}
+  .form-status--success{
+    background:rgba(46,204,113,.1);
+    border:1px solid rgba(46,204,113,.3);
+    color:#7EE2A8;
+  }
+  .form-status--error{
+    background:rgba(255,92,92,.1);
+    border:1px solid rgba(255,92,92,.3);
+    color:#FF9B9B;
+  }
+  .form-status--info{
+    background:rgba(108,99,255,.1);
+    border:1px solid rgba(108,99,255,.3);
+    color:#B4AFFF;
+  }
+  .form-status .icon{font-size:18px;flex-shrink:0;line-height:1.4}
+
+  /* ===== Footer ===== */
+  .footer{
+    background:var(--bg-2);
+    border-top:1px solid var(--border);
+    padding:64px 0 32px;
+  }
+  .footer__grid{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:40px;
+    margin-bottom:48px;
+  }
+  .footer__brand p{
+    color:var(--muted);
+    font-size:14px;
+    margin-top:16px;
+    max-width:280px;
+  }
+  .footer h4{
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:16px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:#C8C8D4;
+  }
+  .footer ul{list-style:none}
+  .footer ul li{margin-bottom:10px}
+  .footer ul a{
+    font-size:14.5px;
+    color:var(--muted);
+    transition:color .2s;
+  }
+  .footer ul a:hover{color:var(--accent)}
+  .footer__bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:32px;
+    border-top:1px solid var(--border);
+    font-size:14px;
+    color:var(--muted);
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .socials{display:flex;gap:12px}
+  .socials a{
+    width:38px;height:38px;
+    border-radius:var(--radius);
+    background:var(--card);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color .2s, color .2s;
+    color:var(--muted);
+  }
+  .socials a:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+  }
+
+  /* ===== Fade-in анимация ===== */
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ===== MODAL ===== */
+  .modal{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .2s ease, visibility .2s ease;
+    will-change:opacity;
+    contain:layout style paint;
+  }
+  .modal.active{
+    opacity:1;
+    visibility:visible;
+  }
+  .modal__overlay{
+    position:absolute;
+    inset:0;
+    background:radial-gradient(
+      circle at center,
+      rgba(10,10,15,.75) 0%,
+      rgba(5,5,10,.88) 100%
+    );
+    transform:translateZ(0);
+    will-change:opacity;
+  }
+  .modal__dialog{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:640px;
+    max-height:calc(100vh - 48px);
+    overflow-y:auto;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:40px;
+    transform:translate3d(0, 20px, 0) scale(.98);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    will-change:transform;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    scrollbar-width:thin;
+    scrollbar-color:var(--border) transparent;
+    box-shadow:0 24px 64px rgba(0,0,0,.6);
+  }
+  .modal.active .modal__dialog{
+    transform:translate3d(0, 0, 0) scale(1);
+  }
+  .modal__dialog::-webkit-scrollbar{width:8px}
+  .modal__dialog::-webkit-scrollbar-thumb{
+    background:var(--border);
+    border-radius:4px;
+  }
+  .modal__close{
+    position:absolute;
+    top:20px;right:20px;
+    width:36px;height:36px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--bg);
+    color:var(--muted);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    line-height:1;
+    transition:border-color .2s, color .2s, background .2s;
+    font-family:inherit;
+  }
+  .modal__close:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+    background:rgba(108,99,255,.08);
+  }
+
+  .modal__head{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:24px;
+    padding-right:44px;
+  }
+  .modal__icon{
+    width:64px;height:64px;
+    border-radius:14px;
+    background:rgba(108,99,255,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    flex-shrink:0;
+  }
+  .modal__title{
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:-.02em;
+    line-height:1.2;
+  }
+  .modal__subtitle{
+    font-size:14px;
+    color:var(--accent);
+    font-weight:600;
+    margin-top:4px;
+  }
+  .modal__section{
+    margin-bottom:28px;
+  }
+  .modal__section h4{
+    font-size:13px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--muted);
+    margin-bottom:12px;
+  }
+  .modal__desc{
+    font-size:15.5px;
+    color:#C8C8D4;
+    line-height:1.7;
+  }
+  .modal__list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .modal__list li{
+    position:relative;
+    padding-left:26px;
+    font-size:15px;
+    color:#C8C8D4;
+    line-height:1.6;
+  }
+  .modal__list li::before{
+    content:'';
+    position:absolute;
+    left:0;top:9px;
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 3px rgba(108,99,255,.15);
+  }
+  .modal__grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+  }
+  .modal__stat{
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:14px;
+    text-align:center;
+  }
+  .modal__stat b{
+    display:block;
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-.02em;
+    margin-bottom:4px;
+  }
+  .modal__stat span{
+    font-size:12.5px;
+    color:var(--muted);
+  }
+  .modal__cta{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+  .modal__cta .btn{flex:1;min-width:200px}
+
+  .modal__review-head{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:20px;
+    padding-right:44px;
+  }
+  .modal__review-head .review__avatar{
+    width:64px;height:64px;
+  }
+  .modal__review-head b{
+    display:block;
+    font-size:18px;
+    font-weight:700;
+  }
+  .modal__review-head span{
+    font-size:14px;
+    color:var(--muted);
+  }
+  .modal__review-stars{
+    color:#FFB800;
+    font-size:16px;
+    letter-spacing:3px;
+    margin-bottom:16px;
+  }
+  .modal__review-text{
+    font-size:16px;
+    line-height:1.75;
+    color:#C8C8D4;
+    margin-bottom:24px;
+  }
+  .modal__review-text p + p{margin-top:14px}
+  .modal__review-result{
+    background:linear-gradient(135deg, rgba(108,99,255,.1), rgba(108,99,255,.03));
+    border:1px solid rgba(108,99,255,.25);
+    border-radius:var(--radius-lg);
+    padding:20px;
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+  }
+  .modal__review-result .icon{
+    font-size:22px;
+    flex-shrink:0;
+  }
+  .modal__review-result b{
+    display:block;
+    font-size:15px;
+    margin-bottom:4px;
+  }
+  .modal__review-result span{
+    font-size:14px;
+    color:var(--muted);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width:1024px){
+    .grid-4{grid-template-columns:repeat(2,1fr)}
+    .advantages .grid-4{grid-template-columns:repeat(2,1fr)}
+    .footer__grid{grid-template-columns:1fr 1fr;gap:32px}
+  }
+
+  @media (max-width:768px){
+    section{padding:72px 0}
+    .container{padding:0 20px}
+
+    /* ===== Мобильное меню ===== */
+    .nav{
+      position:fixed;
+      top:0;right:0;
+      width:min(320px, 85vw);
+      height:100vh;
+      flex-direction:column;
+      justify-content:center;
+      align-items:flex-start;
+      gap:24px;
+      background:var(--bg-2);
+      border-left:1px solid var(--border);
+      transform:translateX(100%);
+      transition:transform .35s cubic-bezier(.4,0,.2,1);
+      padding:40px;
+      z-index:105;
+    }
+    .nav.open{transform:translateX(0)}
+    .nav a{font-size:18px;color:var(--text)}
+    .nav .btn{width:100%;margin-top:16px;justify-content:center}
+    .burger{display:block}
+
+    .hero{padding:100px 0 60px}
+    .hero__stats{gap:32px;margin-top:48px}
+    .hero__stat b{font-size:26px}
+
+    .grid-3{grid-template-columns:1fr}
+    .grid-4{grid-template-columns:1fr}
+    .advantages .grid-4{grid-template-columns:1fr}
+
+    .form-wrap{padding:28px 20px}
+    .form-row{grid-template-columns:1fr}
+
+    .footer__grid{grid-template-columns:1fr;gap:28px}
+    .footer__bottom{flex-direction:column;text-align:center}
+
+    .modal{padding:12px}
+    .modal__dialog{padding:28px 20px;max-height:calc(100vh - 24px)}
+    .modal__head{gap:12px}
+    .modal__icon{width:52px;height:52px;font-size:24px;border-radius:12px}
+    .modal__title{font-size:20px}
+    .modal__grid{grid-template-columns:1fr 1fr}
+    .modal__cta .btn{min-width:100%}
+  }
+
+  @media (max-width:480px){
+    .hero__actions .btn{width:100%}
+    .btn--hero-cta{padding:16px 28px;font-size:16px}
+    .hero__stats{justify-content:space-between;gap:16px}
+    .modal__grid{grid-template-columns:1fr}
+  }
+
+  /* Overlay для мобильного меню */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .3s, visibility .3s;
+    z-index:99;
+  }
+  .overlay.active{opacity:1;visibility:visible}
+
+  @media (min-width:769px){
+    .overlay{display:none}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .btn--primary,
+    .btn--hero-cta,
+    .btn--pulse{animation:none}
+    .reveal{transition:none}
+    .modal,
+    .modal__dialog{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <a href="#" class="logo">Code<span>Start</span></a>
+    <nav class="nav" id="nav">
+      <a href="#directions">Направления</a>
+      <a href="#advantages">Преимущества</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#form" class="btn btn--primary btn--pulse">Записаться</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="overlay" id="overlay"></div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container hero__inner">
+    <div class="hero__badge reveal">Набор на новый поток открыт</div>
+    <h1 class="reveal">Стань разработчиком<br>с <em>нуля до оффера</em></h1>
+    <p class="reveal">Онлайн-курсы программирования с личными менторами из топовых IT-компаний. Практика на реальных проектах и помощь в трудоустройстве.</p>
+    <div class="hero__actions reveal">
+      <a href="#form" class="btn btn--primary btn--lg btn--hero-cta">
+        Записаться на пробный урок
+        <span class="arrow">→</span>
+      </a>
+      <a href="#directions" class="btn btn--ghost btn--lg">Направления</a>
+    </div>
+    <div class="hero__stats reveal">
+      <div class="hero__stat"><b>4 800+</b><span>выпускников</span></div>
+      <div class="hero__stat"><b>87%</b><span>нашли работу</span></div>
+      <div class="hero__stat"><b>4.9</b><span>рейтинг курсов</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DIRECTIONS ===== -->
+<section class="directions" id="directions">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Направления</span>
+      <h2>Выбери свой путь в IT</h2>
+      <p>Четыре востребованных направления с трудоустройством после обучения. Кликни, чтобы узнать подробнее.</p>
+    </div>
+    <div class="grid-4">
+      <button type="button" class="card reveal" data-modal="frontend">
+        <div class="card__icon">🎨</div>
+        <h3>Frontend</h3>
+        <p>HTML, CSS, JavaScript, React. Создавай интерфейсы, которыми пользуются миллионы.</p>
+        <div class="card__meta">6 месяцев · с нуля</div>
+      </button>
+      <button type="button" class="card reveal" data-modal="backend">
+        <div class="card__icon">⚙️</div>
+        <h3>Backend</h3>
+        <p>Python, Node.js, базы данных, API. Разрабатывай серверную логику и архитектуру.</p>
+        <div class="card__meta">8 месяцев · с нуля</div>
+      </button>
+      <button type="button" class="card reveal" data-modal="qa">
+        <div class="card__icon">🔍</div>
+        <h3>QA</h3>
+        <p>Ручное и автоматизированное тестирование. Обеспечь качество IT-продуктов.</p>
+        <div class="card__meta">5 месяцев · с нуля</div>
+      </button>
+      <button type="button" class="card reveal" data-modal="data-science">
+        <div class="card__icon">📊</div>
+        <h3>Data Science</h3>
+        <p>Python, ML, анализ данных. Превращай данные в бизнес-решения.</p>
+        <div class="card__meta">9 месяцев · с нуля</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ADVANTAGES ===== -->
+<section class="advantages" id="advantages">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Почему мы</span>
+      <h2>Преимущества CodeStart</h2>
+      <p>Всё, что нужно для старта карьеры в IT — в одном месте</p>
+    </div>
+    <div class="grid-4">
+      <div class="adv reveal">
+        <div class="adv__icon">👨‍💻</div>
+        <h3>Менторы из топ-компаний</h3>
+        <p>Яндекс, Сбер, VK, Ozon — практикующие разработчики с опытом 5+ лет.</p>
+      </div>
+      <div class="adv reveal">
+        <div class="adv__icon">💼</div>
+        <h3>Портфолио проектов</h3>
+        <p>За время обучения соберёшь 5–7 реальных проектов для резюме.</p>
+      </div>
+      <div class="adv reveal">
+        <div class="adv__icon">🚀</div>
+        <h3>Трудоустройство</h3>
+        <p>Помогаем с резюме, готовим к собеседованиям, делимся вакансиями партнёров.</p>
+      </div>
+      <div class="adv reveal">
+        <div class="adv__icon">⏰</div>
+        <h3>Гибкий график</h3>
+        <p>Учись в удобное время. Все вебинары доступны в записи навсегда.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section class="reviews" id="reviews">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Отзывы</span>
+      <h2>Истории наших выпускников</h2>
+      <p>Люди, которые изменили свою карьеру вместе с CodeStart. Кликни, чтобы прочитать полностью.</p>
+    </div>
+    <div class="grid-3">
+      <button type="button" class="review reveal" data-modal="review-anna">
+        <div class="review__stars">★★★★★</div>
+        <p class="review__text">Пришла из маркетинга, ничего не понимала в коде. Через 7 месяцев получила оффер на позицию Junior Frontend. Менторы — просто огонь, объясняют на пальцах.</p>
+        <div class="review__author">
+          <img class="review__avatar" src="https://i.pravatar.cc/88?img=47" alt="Анна Ковалёва">
+          <div>
+            <b>Анна Ковалёва</b>
+            <span>Frontend-разработчик в Ozon</span>
+          </div>
+        </div>
+        <div class="review__more">Читать полностью</div>
+      </button>
+      <button type="button" class="review reveal" data-modal="review-dmitry">
+        <div class="review__stars">★★★★★</div>
+        <p class="review__text">Работал в поддержке, мечтал о разработке. Понравился формат — много практики, а не сухой теории. Уже через 5 месяцев после старта вышел на первую работу.</p>
+        <div class="review__author">
+          <img class="review__avatar" src="https://i.pravatar.cc/88?img=12" alt="Дмитрий Соколов">
+          <div>
+            <b>Дмитрий Соколов</b>
+            <span>Backend-разработчик в Сбере</span>
+          </div>
+        </div>
+        <div class="review__more">Читать полностью</div>
+      </button>
+      <button type="button" class="review reveal" data-modal="review-maria">
+        <div class="review__stars">★★★★★</div>
+        <p class="review__text">Долго выбирала между курсами. Здесь подкупило внимание к каждому — куратор, ментор, карьерный консультант. Ни разу не пожалела, рекомендую!</p>
+        <div class="review__author">
+          <img class="review__avatar" src="https://i.pravatar.cc/88?img=32" alt="Мария Иванова">
+          <div>
+            <b>Мария Иванова</b>
+            <span>QA-инженер в VK</span>
+          </div>
+        </div>
+        <div class="review__more">Читать полностью</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORM ===== -->
+<section class="form-section" id="form">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Первый шаг</span>
+      <h2>Запишись на бесплатный урок</h2>
+      <p>Познакомишься с ментором, попробуешь формат и выберешь направление</p>
+    </div>
+    <form class="form-wrap reveal" id="leadForm" novalidate>
+      <div class="form-group">
+        <label for="name">Имя *</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Как к вам обращаться"
+          required
+          minlength="2"
+          maxlength="50"
+          autocomplete="name"
+        >
+        <div class="field-error" data-error-for="name"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+            autocomplete="email"
+          >
+          <div class="field-error" data-error-for="email"></div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Телефон *</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="+7 (900) 000-00-00"
+            required
+            pattern="^[+]?[0-9\s\-()]{10,20}$"
+            autocomplete="tel"
+          >
+          <div class="field-error" data-error-for="phone"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="direction">Направление *</label>
+        <select id="direction" name="direction" required>
+          <option value="" disabled selected>Выберите направление</option>
+          <option value="frontend">Frontend</option>
+          <option value="backend">Backend</option>
+          <option value="qa">QA</option>
+          <option value="data-science">Data Science</option>
+          <option value="undecided">Ещё не определился</option>
+        </select>
+        <div class="field-error" data-error-for="direction"></div>
+      </div>
+      <button type="submit" class="btn btn--primary btn--lg form-submit" id="submitBtn">
+        Записаться на пробный урок
+      </button>
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+      <p class="form-note">Нажимая кнопку, вы соглашаетесь с <a href="#">политикой конфиденциальности</a></p>
+    </form>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <div class="logo">Code<span>Start</span></div>
+        <p>Онлайн-школа программирования. Помогаем начать карьеру в IT с нуля.</p>
+      </div>
+      <div>
+        <h4>Обучение</h4>
+        <ul>
+          <li><a href="#directions">Frontend</a></li>
+          <li><a href="#directions">Backend</a></li>
+          <li><a href="#directions">QA</a></li>
+          <li><a href="#directions">Data Science</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Компания</h4>
+        <ul>
+          <li><a href="#">О нас</a></li>
+          <li><a href="#reviews">Отзывы</a></li>
+          <li><a href="#">Вакансии</a></li>
+          <li><a href="#">Блог</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="mailto:hello@codestart.ru">hello@codestart.ru</a></li>
+          <li><a href="tel:+78001234567">+7 (800) 123-45-67</a></li>
+          <li><a href="#">Москва, ул. Пример, 1</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2025 CodeStart. Все права защищены.</span>
+      <div class="socials">
+        <a href="#" aria-label="Telegram">✈</a>
+        <a href="#" aria-label="VK">VK</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== MODAL: FRONTEND ===== -->
+<div class="modal" id="modal-frontend" role="dialog" aria-modal="true" aria-labelledby="frontend-title">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__dialog">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div class="modal__head">
+      <div class="modal__icon">🎨</div>
+      <div>
+        <div class="modal__title" id="frontend-title">Frontend-разработка</div>
+        <div class="modal__subtitle">6 месяцев · с нуля до Junior</div>
+      </div>
+    </div>
+
+    <div class="modal__section">
+      <h4>О направлении</h4>
+      <p class="modal__desc">Frontend — это всё, что пользователь видит и с чем взаимодействует в браузере. Ты будешь создавать интерфейсы сайтов и веб-приложений: от лендингов до сложных SPA на React. Одно из самых востребованных направлений: junior-разработчики нужны почти каждой компании.</p>
+    </div>
+
+    <div class="modal__section">
+      <h4>Чему научишься</h4>
+      <ul class="modal__list">
+        <li>Вёрстка HTML5 и CSS3, Flexbox, Grid, адаптивность</li>
+        <li>JavaScript с нуля до продвинутого уровня, ES6+</li>
+        <li>React, хуки, работа с состоянием, React Router</li>
+        <li>Работа с API, fetch, асинхронность, Git и GitHub</li>
+        <li>Сборка проектов через Vite, деплой на Vercel</li>
+      </ul>
+    </div>
+
+    <div class="modal__section">
+      <h4>Формат</h4>
+      <div class="modal__grid">
+        <div class="modal__stat"><b>6</b><span>месяцев</span></div>
+        <div class="modal__stat"><b>12</b><span>часов/нед</span></div>
+        <div class="modal__stat"><b>7</b><span>проектов</span></div>
+      </div>
+    </div>
+
+    <div class="modal__cta">
+      <button type="button" class="btn btn--primary" data-close data-cta="frontend">Записаться на пробный урок</button>
+      <button type="button" class="btn btn--ghost" data-close>Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: BACKEND ===== -->
+<div class="modal" id="modal-backend" role="dialog" aria-modal="true" aria-labelledby="backend-title">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__dialog">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div class="modal__head">
+      <div class="modal__icon">⚙️</div>
+      <div>
+        <div class="modal__title" id="backend-title">Backend-разработка</div>
+        <div class="modal__subtitle">8 месяцев · с нуля до Junior</div>
+      </div>
+    </div>
+
+    <div class="modal__section">
+      <h4>О направлении</h4>
+      <p class="modal__desc">Backend — это «мозг» любого приложения: логика, базы данных, API, безопасность, интеграции. Если тебе интересно, как устроены системы изнутри и как обрабатываются миллионы запросов — это твоё направление. Backend-разработчики — одни из самых высокооплачиваемых в IT.</p>
+    </div>
+
+    <div class="modal__section">
+      <h4>Чему научишься</h4>
+      <ul class="modal__list">
+        <li>Python с нуля, ООП, работа со структурами данных</li>
+        <li>FastAPI / Django, создание REST API</li>
+        <li>SQL и PostgreSQL, проектирование баз данных</li>
+        <li>Асинхронность, Redis, очереди, Docker</li>
+        <li>Git, CI/CD, деплой приложений на сервер</li>
+      </ul>
+    </div>
+
+    <div class="modal__section">
+      <h4>Формат</h4>
+      <div class="modal__grid">
+        <div class="modal__stat"><b>8</b><span>месяцев</span></div>
+        <div class="modal__stat"><b>14</b><span>часов/нед</span></div>
+        <div class="modal__stat"><b>6</b><span>проектов</span></div>
+      </div>
+    </div>
+
+    <div class="modal__cta">
+      <button type="button" class="btn btn--primary" data-close data-cta="backend">Записаться на пробный урок</button>
+      <button type="button" class="btn btn--ghost" data-close>Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: QA ===== -->
+<div class="modal" id="modal-qa" role="dialog" aria-modal="true" aria-labelledby="qa-title">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__dialog">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div class="modal__head">
+      <div class="modal__icon">🔍</div>
+      <div>
+        <div class="modal__title" id="qa-title">QA-тестирование</div>
+        <div class="modal__subtitle">5 месяцев · с нуля до Junior</div>
+      </div>
+    </div>
+
+    <div class="modal__section">
+      <h4>О направлении</h4>
+      <p class="modal__desc">QA-инженер следит за качеством продукта: находит баги, проверяет функциональность, пишет автотесты. Это самый лёгкий вход в IT — не нужна глубокая математика, но нужно внимание к деталям. Отличный старт для тех, кто хочет быстро войти в профессию.</p>
+    </div>
+
+    <div class="modal__section">
+      <h4>Чему научишься</h4>
+      <ul class="modal__list">
+        <li>Основы тестирования, виды и уровни тестов</li>
+        <li>Тест-дизайн, чек-листы, тест-кейсы, баг-репорты</li>
+        <li>Работа с Postman, DevTools, SQL для тестировщика</li>
+        <li>Автотесты на Python + Selenium и Pytest</li>
+        <li>Jira, TestRail, работа в Agile-командах</li>
+      </ul>
+    </div>
+
+    <div class="modal__section">
+      <h4>Формат</h4>
+      <div class="modal__grid">
+        <div class="modal__stat"><b>5</b><span>месяцев</span></div>
+        <div class="modal__stat"><b>10</b><span>часов/нед</span></div>
+        <div class="modal__stat"><b>4</b><span>проекта</span></div>
+      </div>
+    </div>
+
+    <div class="modal__cta">
+      <button type="button" class="btn btn--primary" data-close data-cta="qa">Записаться на пробный урок</button>
+      <button type="button" class="btn btn--ghost" data-close>Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: DATA SCIENCE ===== -->
+<div class="modal" id="modal-data-science" role="dialog" aria-modal="true" aria-labelledby="ds-title">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__dialog">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div class="modal__head">
+      <div class="modal__icon">📊</div>
+      <div>
+        <div class="modal__title" id="ds-title">Data Science</div>
+        <div class="modal__subtitle">9 месяцев · с нуля до Junior</div>
+      </div>
+    </div>
+
+    <div class="modal__section">
+      <h4>О направлении</h4>
+      <p class="modal__desc">Data Science — работа с данными и машинным обучением. Ты будешь строить модели, которые предсказывают поведение пользователей, оптимизируют бизнес-процессы и решают задачи, недоступные классическому программированию. Престижное и высокооплачиваемое направление.</p>
+    </div>
+
+    <div class="modal__section">
+      <h4>Чему научишься</h4>
+      <ul class="modal__list">
+        <li>Python, NumPy, Pandas, визуализация данных</li>
+        <li>Математика и статистика для DS: от основ до ML</li>
+        <li>Машинное обучение: Scikit-learn, регрессии, классификация</li>
+        <li>Нейросети, TensorFlow / PyTorch, основы NLP и CV</li>
+        <li>SQL, Airflow, основы MLOps и деплоя моделей</li>
+      </ul>
+    </div>
+
+    <div class="modal__section">
+      <h4>Формат</h4>
+      <div class="modal__grid">
+        <div class="modal__stat"><b>9</b><span>месяцев</span></div>
+        <div class="modal__stat"><b>16</b><span>часов/нед</span></div>
+        <div class="modal__stat"><b>5</b><span>проектов</span></div>
+      </div>
+    </div>
+
+    <div class="modal__cta">
+      <button type="button" class="btn btn--primary" data-close data-cta="data-science">Записаться на пробный урок</button>
+      <button type="button" class="btn btn--ghost" data-close>Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: REVIEW ANNA ===== -->
+<div class="modal" id="modal-review-anna" role="dialog" aria-modal="true">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__dialog">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div class="modal__review-head">
+      <img class="review__avatar" src="https://i.pravatar.cc/120?img=47" alt="Анна Ковалёва">
+      <div>
+        <b>Анна Ковалёва</b>
+        <span>Frontend-разработчик в Ozon</span>
+      </div>
+    </div>
+    <div class="modal__review-stars">★★★★★</div>
+    <div class="modal__review-text">
+      <p>До CodeStart я работала маркетологом — и даже не представляла, что смогу писать код. Первый месяц был самым сложным: казалось, что HTML и CSS — это какая-то магия, которую мне не понять. Но ментор терпеливо объяснял каждую тему, пока не доходило.</p>
+      <p>Самое ценное — практика. Мы не просто изучали теорию, а сразу делали проекты: лендинги, интернет-магазин, дашборд. К концу 4-го месяца у меня было портфолио из 5 работ, и я начала откликаться на вакансии.</p>
+      <p>Карьерный консультант помог составить резюме, отрепетировал со мной вопросы с собеседований. Оффер получила через 7 месяцев после старта. Сейчас работаю в Ozon и до сих пор не верю, что это случилось со мной.</p>
+    </div>
+    <div class="modal__review-result">
+      <div class="icon">🎯</div>
+      <div>
+        <b>Результат: Junior Frontend в Ozon</b>
+        <span>Срок от старта до оффера — 7 месяцев</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: REVIEW DMITRY ===== -->
+<div class="modal" id="modal-review-dmitry" role="dialog" aria-modal="true">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__dialog">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div class="modal__review-head">
+      <img class="review__avatar" src="https://i.pravatar.cc/120?img=12" alt="Дмитрий Соколов">
+      <div>
+        <b>Дмитрий Соколов</b>
+        <span>Backend-разработчик в Сбере</span>
+      </div>
+    </div>
+    <div class="modal__review-stars">★★★★★</div>
+    <div class="modal__review-text">
+      <p>Я работал в техподдержке и уже года три смотрел в сторону разработки, но всё не решался. Боялся, что не хватит математики, что не потяну после работы. В CodeStart понравилось, что можно учиться в своём темпе: вебинары вечером, записи — всегда под рукой.</p>
+      <p>Особенно зашла подача. Никакой «воды» — только практика. Уже на второй месяц мы писали реальный API для учебного проекта, разбирали архитектуру, покрывали тестами. Ментор каждый раз объяснял, почему в реальных проектах делают именно так, а не иначе.</p>
+      <p>К концу обучения у меня было 6 проектов на GitHub и уверенное понимание стека. Прошёл 4 собеседования, получил два оффера, выбрал Сбер. Спасибо команде за поддержку — она действительно ощущается на каждом этапе.</p>
+    </div>
+    <div class="modal__review-result">
+      <div class="icon">🎯</div>
+      <div>
+        <b>Результат: Junior Backend в Сбере</b>
+        <span>Срок от старта до оффера — 5 месяцев</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: REVIEW MARIA ===== -->
+<div class="modal" id="modal-review-maria" role="dialog" aria-modal="true">
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__dialog">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div class="modal__review-head">
+      <img class="review__avatar" src="https://i.pravatar.cc/120?img=32" alt="Мария Иванова">
+      <div>
+        <b>Мария Иванова</b>
+        <span>QA-инженер в VK</span>
+      </div>
+    </div>
+    <div class="modal__review-stars">★★★★★</div>
+    <div class="modal__review-text">
+      <p>Перед выбором курсов я сравнивала штук пять школ. Подкупило то, что в CodeStart к каждому студенту прикреплён куратор, ментор и карьерный консультант — то есть поддержка не только по учёбе, но и по трудоустройству.</p>
+      <p>QA оказался именно тем направлением, где я смогла раскрыться. Не нужно было зубрить сложную математику, но при этом каждый день — реальная работа с продуктом: искала баги в тренировочных приложениях, писала тест-кейсы, осваивала автотесты на Python.</p>
+      <p>Отдельное спасибо за модуль по собеседованиям: разобрали типичные вопросы, отработали soft skills, научили правильно рассказывать о своих проектах. Уже через 5 месяцев вышла на работу в VK. Ни разу не пожалела о выборе!</p>
+    </div>
+    <div class="modal__review-result">
+      <div class="icon">🎯</div>
+      <div>
+        <b>Результат: QA-инженер в VK</b>
+        <span>Срок от старта до оффера — 5 месяцев</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EmailJS SDK ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+/* =========================================================
+   CodeStart — main script
+   Всё обёрнуто в DOMContentLoaded + try/catch,
+   чтобы падение одного блока не ломало остальные.
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', function () {
+
+  console.log(
+    '%c CodeStart ',
+    'background:#6C63FF;color:#fff;padding:4px 8px;border-radius:4px;font-weight:bold',
+    'Скрипт запущен'
+  );
+
+  /* =========================================================
+     ⚙️  EmailJS настройки (при необходимости замени)
+     ========================================================= */
+  var EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+  var EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+  var EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+
+  var emailjsConfigured =
+    EMAILJS_PUBLIC_KEY.indexOf('YOUR_') !== 0 &&
+    EMAILJS_SERVICE_ID.indexOf('YOUR_') !== 0 &&
+    EMAILJS_TEMPLATE_ID.indexOf('YOUR_') !== 0 &&
+    typeof emailjs !== 'undefined';
+
+  if (typeof emailjs !== 'undefined' && emailjsConfigured){
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  } else {
+    console.warn(
+      '%c EmailJS не настроен ',
+      'background:#FF5C5C;color:#fff;padding:4px 8px;border-radius:4px;font-weight:bold',
+      'Работает мок-режим. Замени PUBLIC_KEY / SERVICE_ID / TEMPLATE_ID.'
+    );
+  }
+
+  var COURSE_DATA = {
+    frontend:        { name: 'Frontend-разработка', duration: '6 месяцев', projects: '7 проектов' },
+    backend:         { name: 'Backend-разработка',  duration: '8 месяцев', projects: '6 проектов' },
+    qa:              { name: 'QA-тестирование',     duration: '5 месяцев', projects: '4 проекта'  },
+    'data-science':  { name: 'Data Science',        duration: '9 месяцев', projects: '5 проектов' },
+    undecided:       { name: 'не определено',       duration: '—',         projects: '—'          }
+  };
+
+  /* =========================================================
+     1. БУРГЕР-МЕНЮ — ГАРАНТИРОВАННО РАБОТАЮЩЕЕ
+     ========================================================= */
+  try {
+    var burger  = document.getElementById('burger');
+    var nav     = document.getElementById('nav');
+    var overlay = document.getElementById('overlay');
+
+    if (burger && nav && overlay) {
+      var toggleMenu = function (open) {
+        burger.classList.toggle('active', open);
+        nav.classList.toggle('open', open);
+        overlay.classList.toggle('active', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (!document.querySelector('.modal.active')) {
+          document.body.classList.toggle('no-scroll', open);
+        }
+      };
+
+      burger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var isOpen = nav.classList.contains('open');
+        toggleMenu(!isOpen);
+      });
+
+      overlay.addEventListener('click', function () {
+        toggleMenu(false);
+      });
+
+      // Закрываем меню при клике на любую ссылку внутри
+      var navLinks = nav.querySelectorAll('a');
+      for (var i = 0; i < navLinks.length; i++) {
+        navLinks[i].addEventListener('click', function () {
+          toggleMenu(false);
+        });
+      }
+
+      // Закрываем меню по Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav.classList.contains('open')) {
+          toggleMenu(false);
+        }
+      });
+
+      console.log('✓ Burger menu: initialized');
+    } else {
+      console.warn('⚠ Burger menu: не найдены элементы #burger / #nav / #overlay');
+    }
+  } catch (err) {
+    console.error('Burger menu error:', err);
+  }
+
+  /* =========================================================
+     2. СКРОЛЛ-ЭФФЕКТ ХЕДЕРА
+     ========================================================= */
+  try {
+    var header = document.getElementById('header');
+    if (header) {
+      window.addEventListener('scroll', function () {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+      }, { passive: true });
+    }
+  } catch (err) {
+    console.error('Header scroll error:', err);
+  }
+
+  /* =========================================================
+     3. ПЛАВНЫЙ СКРОЛЛ
+     ========================================================= */
+  try {
+    var anchors = document.querySelectorAll('a[href^="#"]');
+    for (var j = 0; j < anchors.length; j++) {
+      anchors[j].addEventListener('click', function (e) {
+        var targetId = this.getAttribute('href');
+        if (!targetId || targetId === '#' || targetId.length < 2) return;
+        var target = document.querySelector(targetId);
+        if (!target) return;
+        e.preventDefault();
+        var top = target.getBoundingClientRect().top + window.pageYOffset - 72;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      });
+    }
+    console.log('✓ Smooth scroll: initialized');
+  } catch (err) {
+    console.error('Smooth scroll error:', err);
+  }
+
+  /* =========================================================
+     4. FADE-IN ПРИ СКРОЛЛЕ — IntersectionObserver
+     ========================================================= */
+  try {
+    var revealEls = document.querySelectorAll('.reveal');
+    console.log('✓ Reveal: найдено элементов —', revealEls.length);
+
+    if (revealEls.length > 0) {
+      if ('IntersectionObserver' in window) {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry, index) {
+            if (entry.isIntersecting) {
+              setTimeout(function () {
+                entry.target.classList.add('visible');
+              }, index * 60);
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.08,
+          rootMargin: '0px 0px -20px 0px'
+        });
+
+        for (var k = 0; k < revealEls.length; k++) {
+          revealObserver.observe(revealEls[k]);
+        }
+      } else {
+        // Fallback для старых браузеров / WebView
+        console.warn('⚠ IntersectionObserver не поддерживается — показываю всё сразу');
+        for (var m = 0; m < revealEls.length; m++) {
+          revealEls[m].classList.add('visible');
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Reveal error:', err);
+    // На всякий случай — показать всё, чтобы контент не остался невидимым
+    var fallbackEls = document.querySelectorAll('.reveal');
+    for (var n = 0; n < fallbackEls.length; n++) {
+      fallbackEls[n].classList.add('visible');
+    }
+  }
+
+  /* =========================================================
+     5. МОДАЛКИ
+     ========================================================= */
+  var directionSelect = document.getElementById('direction');
+
+  try {
+    var modalTriggers = document.querySelectorAll('[data-modal]');
+    var allModals = document.querySelectorAll('.modal');
+    var activeModal = null;
+    var lastFocused = null;
+    var warmedUp = new WeakSet();
+
+    var warmUpModal = function (modal) {
+      if (warmedUp.has(modal)) return;
+      warmedUp.add(modal);
+      var dialog = modal.querySelector('.modal__dialog');
+      if (!dialog) return;
+      dialog.style.transform = 'translate3d(0, 0, 0)';
+      void dialog.offsetHeight;
+      dialog.style.transform = '';
+    };
+
+    var p;
+    for (p = 0; p < modalTriggers.length; p++) {
+      (function (trigger) {
+        var id = trigger.getAttribute('data-modal');
+        var modal = document.getElementById('modal-' + id);
+        if (!modal) return;
+        trigger.addEventListener('mouseenter', function () { warmUpModal(modal); }, { passive: true });
+        trigger.addEventListener('focus',      function () { warmUpModal(modal); }, { passive: true });
+        trigger.addEventListener('touchstart', function () { warmUpModal(modal); }, { passive: true });
+      })(modalTriggers[p]);
+    }
+
+    var openModal = function (id) {
+      var modal = document.getElementById('modal-' + id);
+      if (!modal) return;
+      warmUpModal(modal);
+      lastFocused = document.activeElement;
+      activeModal = modal;
+      requestAnimationFrame(function () {
+        modal.classList.add('active');
+        document.body.classList.add('no-scroll');
+        requestAnimationFrame(function () {
+          var btn = modal.querySelector('.modal__close');
+          if (btn) btn.focus({ preventScroll: true });
+        });
+      });
+    };
+
+    var closeModal = function () {
+      if (!activeModal) return;
+      var modalToClose = activeModal;
+      activeModal = null;
+      requestAnimationFrame(function () {
+        modalToClose.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+        setTimeout(function () {
+          if (lastFocused && lastFocused.focus) {
+            lastFocused.focus({ preventScroll: true });
+          }
+        }, 200);
+      });
+    };
+
+    var q;
+    for (q = 0; q < modalTriggers.length; q++) {
+      (function (trigger) {
+        trigger.addEventListener('click', function () {
+          var id = trigger.getAttribute('data-modal');
+          openModal(id);
+        });
+      })(modalTriggers[q]);
+    }
+
+    var r;
+    for (r = 0; r < allModals.length; r++) {
+      (function (modal) {
+        var closers = modal.querySelectorAll('[data-close]');
+        var s;
+        for (s = 0; s < closers.length; s++) {
+          (function (el) {
+            el.addEventListener('click', function (e) {
+              var cta = e.currentTarget.getAttribute('data-cta');
+              if (cta && directionSelect) {
+                closeModal();
+                setTimeout(function () {
+                  directionSelect.value = cta;
+                  var formSection = document.getElementById('form');
+                  if (formSection) {
+                    var top = formSection.getBoundingClientRect().top + window.pageYOffset - 72;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                  }
+                }, 220);
+              } else {
+                closeModal();
+              }
+            });
+          })(closers[s]);
+        }
+      })(allModals[r]);
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && activeModal) closeModal();
+    });
+
+    console.log('✓ Modals: initialized —', allModals.length, 'шт.');
+  } catch (err) {
+    console.error('Modals error:', err);
+  }
+
+  /* =========================================================
+     6. ФОРМА — валидация + отправка письма
+     ========================================================= */
+  var form = document.getElementById('leadForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var formStatus = document.getElementById('formStatus');
+  var STORAGE_KEY = 'codestart_leads';
+
+  function getLeads() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveLead(lead) {
+    var leads = getLeads();
+    leads.push(lead);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
+    return leads.length;
+  }
+
+  function normalizePhone(phone) { return phone.replace(/[^\d]/g, ''); }
+  function normalizeEmail(email) { return email.trim().toLowerCase(); }
+  function normalizeName(name) { return name.trim().replace(/\s+/g, ' '); }
+
+  function showFieldError(field, message) {
+    var errorBox = form.querySelector('[data-error-for="' + field.id + '"]');
+    if (!errorBox) return;
+    errorBox.textContent = message;
+    errorBox.classList.add('show');
+    field.classList.add('is-invalid');
+    field.classList.remove('is-valid');
+  }
+
+  function clearFieldError(field) {
+    var errorBox = form.querySelector('[data-error-for="' + field.id + '"]');
+    if (!errorBox) return;
+    errorBox.textContent = '';
+    errorBox.classList.remove('show');
+    field.classList.remove('is-invalid');
+    field.classList.add('is-valid');
+  }
+
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+  var nameRegex = /^[A-Za-zА-Яа-яЁё\s\-']{2,50}$/;
+
+  function validateField(field) {
+    if (!field) return true;
+    var value = field.value.trim();
+
+    if (field.id === 'name') {
+      if (!value) { showFieldError(field, 'Укажите ваше имя'); return false; }
+      if (value.length < 2) { showFieldError(field, 'Имя должно содержать минимум 2 символа'); return false; }
+      if (!nameRegex.test(value)) { showFieldError(field, 'Только буквы, пробел и дефис'); return false; }
+      clearFieldError(field);
+      return true;
+    }
+
+    if (field.id === 'email') {
+      if (!value) { showFieldError(field, 'Укажите email'); return false; }
+      if (!emailRegex.test(value)) { showFieldError(field, 'Введите корректный email'); return false; }
+      var leads = getLeads();
+      var exists = false;
+      for (var i = 0; i < leads.length; i++) {
+        if (leads[i].email === normalizeEmail(value)) { exists = true; break; }
+      }
+      if (exists) { showFieldError(field, 'Этот email уже зарегистрирован'); return false; }
+      clearFieldError(field);
+      return true;
+    }
+
+    if (field.id === 'phone') {
+      if (!value) { showFieldError(field, 'Укажите телефон'); return false; }
+      var digits = normalizePhone(value);
+      if (digits.length < 10 || digits.length > 15) {
+        showFieldError(field, 'Телефон должен содержать 10–15 цифр');
+        return false;
+      }
+      clearFieldError(field);
+      return true;
+    }
+
+    if (field.id === 'direction') {
+      if (!value) { showFieldError(field, 'Выберите направление'); return false; }
+      clearFieldError(field);
+      return true;
+    }
+
+    return true;
+  }
+
+  if (form) {
+    var fieldIds = ['name', 'email', 'phone', 'direction'];
+    for (var f = 0; f < fieldIds.length; f++) {
+      (function (id) {
+        var field = document.getElementById(id);
+        if (!field) return;
+        field.addEventListener('blur', function () {
+          if (field.value.trim()) validateField(field);
+        });
+        field.addEventListener('input', function () {
+          if (field.classList.contains('is-invalid')) validateField(field);
+        });
+        if (field.tagName === 'SELECT') {
+          field.addEventListener('change', function () { validateField(field); });
+        }
+      })(fieldIds[f]);
+    }
+
+    var showStatus = function (type, message) {
+      formStatus.className = 'form-status show form-status--' + type;
+      var icon = type === 'success' ? '✓' : type === 'info' ? '✉' : '⚠';
+      formStatus.innerHTML = '<span class="icon">' + icon + '</span><span>' + message + '</span>';
+      if (type === 'success') {
+        setTimeout(function () { formStatus.classList.remove('show'); }, 8000);
+      }
+    };
+
+    var hideStatus = function () { formStatus.classList.remove('show'); };
+
+    var sendWelcomeEmail = function (lead) {
+      var course = COURSE_DATA[lead.direction] || COURSE_DATA.undecided;
+
+      var templateParams = {
+        to_name: lead.name,
+        to_email: lead.email,
+        subject: 'Добро пожаловать в CodeStart!',
+        direction: course.name,
+        course_duration: course.duration,
+        course_projects: course.projects,
+        from_name: 'Команда CodeStart',
+        reply_to: 'hello@codestart.ru'
+      };
+
+      if (!emailjsConfigured) {
+        console.log(
+          '%c 📧 MOCK: приветственное письмо ',
+          'background:#6C63FF;color:#fff;padding:4px 8px;border-radius:4px;font-weight:bold',
+          'Получатель:', lead.email, '\nПараметры:', templateParams
+        );
+        return new Promise(function (resolve) {
+          setTimeout(function () { resolve({ status: 200, text: 'MOCK_OK' }); }, 500);
+        });
+      }
+
+      return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+    };
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      hideStatus();
+      form.classList.add('was-validated');
+
+      var fields = [
+        document.getElementById('name'),
+        document.getElementById('email'),
+        document.getElementById('phone'),
+        document.getElementById('direction')
+      ];
+      var firstInvalid = null;
+
+      for (var i = 0; i < fields.length; i++) {
+        var ok = validateField(fields[i]);
+        if (!ok && !firstInvalid) firstInvalid = fields[i];
+      }
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        showStatus('error', 'Исправьте ошибки в форме и попробуйте снова.');
+        return;
+      }
+
+      var lead = {
+        name: normalizeName(document.getElementById('name').value),
+        email: normalizeEmail(document.getElementById('email').value),
+        phone: document.getElementById('phone').value.trim(),
+        phoneDigits: normalizePhone(document.getElementById('phone').value),
+        direction: directionSelect.value,
+        directionLabel: directionSelect.options[directionSelect.selectedIndex].textContent,
+        createdAt: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        page: window.location.href
+      };
+
+      submitBtn.disabled = true;
+      var originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Отправляем...';
+      showStatus('info', 'Отправляем заявку и готовим приветственное письмо...');
+
+      try {
+        await sendWelcomeEmail(lead);
+        var total = saveLead(Object.assign({}, lead, { welcomeEmailSent: true }));
+
+        showStatus(
+          'success',
+          lead.name + ', спасибо! Письмо отправлено на <b>' + lead.email + '</b>. ' +
+          'Мы свяжемся в течение дня и подберём время для пробного урока по направлению «' +
+          lead.directionLabel + '».'
+        );
+
+        form.reset();
+        form.classList.remove('was-validated');
+        for (var j = 0; j < fields.length; j++) {
+          fields[j].classList.remove('is-valid', 'is-invalid');
+        }
+        var errors = form.querySelectorAll('.field-error');
+        for (var k = 0; k < errors.length; k++) {
+          errors[k].textContent = '';
+          errors[k].classList.remove('show');
+        }
+
+        console.log('✓ Заявка сохранена. Всего:', total, '| Письмо ушло на:', lead.email);
+      } catch (err) {
+        console.error('Ошибка отправки:', err);
+        showStatus(
+          'error',
+          'Не удалось отправить письмо. Заявка сохранена, мы свяжемся вручную. ' +
+          'Если срочно — напишите в Telegram.'
+        );
+        saveLead(Object.assign({}, lead, {
+          welcomeEmailSent: false,
+          emailError: String(err && (err.text || err.message) || err)
+        }));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+  }
+
+  /* =========================================================
+     7. ИТОГОВЫЙ ЛОГ
+     ========================================================= */
+  console.log(
+    '%c CodeStart ',
+    'background:#6C63FF;color:#fff;padding:4px 8px;border-radius:4px;font-weight:bold',
+    'Заявок: ' + getLeads().length + ' | EmailJS: ' + (emailjsConfigured ? '✓' : '⚠ мок')
+  );
+});
+</script>
+</body>
+</html>
